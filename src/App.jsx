@@ -1,24 +1,42 @@
+import { useEffect, useState } from "react";
 import AboutSection from "./components/AboutSection";
 import InsightsSection from "./components/InsightsSection";
 import PortfolioSection from "./components/PortfolioSection";
 import ContactSection from "./components/ContactSection";
+import ThemeCustomizer from "./components/ThemeCustomizer";
 import { Leaf } from "lucide-react";
 
-function Header() {
+const DEFAULT_THEME = {
+  primary: "#6a0013",
+  primaryDark: "#4a000e",
+  bgSoft: "#fdecef",
+  bgLight: "#f8e7ea",
+  textPrimary: "#2b2324",
+};
+
+function Header({ logo }) {
   return (
-    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur border-b border-[#6a0013]/10">
+    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur border-b border-[var(--color-primary)]/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <a href="#about" className="inline-flex items-center gap-2 text-[#4a000e] font-semibold">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#f3d6db] text-[#6a0013]">
-            <Leaf size={18} />
+        <a href="#about" className="inline-flex items-center gap-2 text-[var(--color-primary-dark)] font-semibold">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--bg-soft)] text-[var(--color-primary)]">
+            {logo?.type === "image" && logo?.value ? (
+              <img src={logo.value} alt="logo" className="h-5 w-5 object-contain" />
+            ) : logo?.type === "text" ? (
+              <Leaf size={18} />
+            ) : (
+              <Leaf size={18} />
+            )}
           </span>
-          <span>Antares FRH</span>
+          <span>
+            {logo?.type === "text" ? (logo?.value || "Antares FRH") : "Antares FRH"}
+          </span>
         </a>
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#about" className="text-[#6a0013] hover:text-[#4a000e]">About</a>
-          <a href="#insights" className="text-[#6a0013] hover:text-[#4a000e]">Insights</a>
-          <a href="#portfolio" className="text-[#6a0013] hover:text-[#4a000e]">Portfolio</a>
-          <a href="#contact" className="text-[#6a0013] hover:text-[#4a000e]">Contact</a>
+          <a href="#about" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">About</a>
+          <a href="#insights" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Insights</a>
+          <a href="#portfolio" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Portfolio</a>
+          <a href="#contact" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Contact</a>
         </nav>
       </div>
     </header>
@@ -27,8 +45,8 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className="border-t border-[#6a0013]/10">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-[#6a0013]/80">
+    <footer className="border-t border-[var(--color-primary)]/10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-[var(--color-primary)]/80">
         <p>
           © {new Date().getFullYear()} ANTARES FATHUL RIZKI HARAHAP — Built with a climate-positive mindset.
         </p>
@@ -38,9 +56,36 @@ function Footer() {
 }
 
 export default function App() {
+  const [theme, setTheme] = useState(DEFAULT_THEME);
+  const [logo, setLogo] = useState({ type: "text", value: "Antares FRH" });
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("afrh-theme");
+    if (savedTheme) {
+      try {
+        setTheme(JSON.parse(savedTheme));
+      } catch {}
+    }
+    const savedLogo = localStorage.getItem("afrh-logo");
+    if (savedLogo) {
+      try {
+        setLogo(JSON.parse(savedLogo));
+      } catch {}
+    }
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty("--color-primary", theme.primary);
+    root.style.setProperty("--color-primary-dark", theme.primaryDark);
+    root.style.setProperty("--bg-soft", theme.bgSoft);
+    root.style.setProperty("--bg-light", theme.bgLight);
+    root.style.setProperty("--text-primary", theme.textPrimary);
+  }, [theme]);
+
   return (
-    <div className="min-h-screen bg-white font-inter">
-      <Header />
+    <div className="min-h-screen bg-white font-inter text-[var(--text-primary)]">
+      <Header logo={logo} />
       <main>
         <AboutSection />
         <InsightsSection />
@@ -48,6 +93,8 @@ export default function App() {
         <ContactSection />
       </main>
       <Footer />
+
+      <ThemeCustomizer theme={theme} setTheme={setTheme} logo={logo} setLogo={setLogo} />
     </div>
   );
 }
