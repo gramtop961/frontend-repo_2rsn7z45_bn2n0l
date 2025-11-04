@@ -4,7 +4,8 @@ import InsightsSection from "./components/InsightsSection";
 import PortfolioSection from "./components/PortfolioSection";
 import ContactSection from "./components/ContactSection";
 import ThemeCustomizer from "./components/ThemeCustomizer";
-import { Leaf } from "lucide-react";
+import SocialLinksEditor from "./components/SocialLinksEditor";
+import { Leaf, Linkedin, Twitter, MessageCircle } from "lucide-react";
 
 const DEFAULT_THEME = {
   primary: "#6a0013",
@@ -14,7 +15,7 @@ const DEFAULT_THEME = {
   textPrimary: "#2b2324",
 };
 
-function Header({ logo }) {
+function Header({ logo, social }) {
   return (
     <header className="sticky top-0 z-50 bg-white/70 backdrop-blur border-b border-[var(--color-primary)]/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -32,12 +33,49 @@ function Header({ logo }) {
             {logo?.type === "text" ? (logo?.value || "Antares FRH") : "Antares FRH"}
           </span>
         </a>
-        <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#about" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">About</a>
-          <a href="#insights" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Insights</a>
-          <a href="#portfolio" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Portfolio</a>
-          <a href="#contact" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Contact</a>
-        </nav>
+        <div className="flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            <a href="#about" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">About</a>
+            <a href="#insights" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Insights</a>
+            <a href="#portfolio" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Portfolio</a>
+            <a href="#contact" className="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)]">Contact</a>
+          </nav>
+          <div className="flex items-center gap-3">
+            {social?.linkedin ? (
+              <a
+                href={social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--bg-soft)] text-[var(--color-primary)] hover:bg-[var(--bg-light)]"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={16} />
+              </a>
+            ) : null}
+            {social?.twitter ? (
+              <a
+                href={social.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--bg-soft)] text-[var(--color-primary)] hover:bg-[var(--bg-light)]"
+                aria-label="Twitter"
+              >
+                <Twitter size={16} />
+              </a>
+            ) : null}
+            {social?.whatsapp ? (
+              <a
+                href={social.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[var(--bg-soft)] text-[var(--color-primary)] hover:bg-[var(--bg-light)]"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle size={16} />
+              </a>
+            ) : null}
+          </div>
+        </div>
       </div>
     </header>
   );
@@ -58,19 +96,20 @@ function Footer() {
 export default function App() {
   const [theme, setTheme] = useState(DEFAULT_THEME);
   const [logo, setLogo] = useState({ type: "text", value: "Antares FRH" });
+  const [social, setSocial] = useState({ linkedin: "", whatsapp: "", twitter: "" });
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("afrh-theme");
     if (savedTheme) {
-      try {
-        setTheme(JSON.parse(savedTheme));
-      } catch {}
+      try { setTheme(JSON.parse(savedTheme)); } catch {}
     }
     const savedLogo = localStorage.getItem("afrh-logo");
     if (savedLogo) {
-      try {
-        setLogo(JSON.parse(savedLogo));
-      } catch {}
+      try { setLogo(JSON.parse(savedLogo)); } catch {}
+    }
+    const savedSocial = localStorage.getItem("afrh-social");
+    if (savedSocial) {
+      try { setSocial(JSON.parse(savedSocial)); } catch {}
     }
   }, []);
 
@@ -85,7 +124,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white font-inter text-[var(--text-primary)]">
-      <Header logo={logo} />
+      <Header logo={logo} social={social} />
       <main>
         <AboutSection />
         <InsightsSection />
@@ -95,6 +134,7 @@ export default function App() {
       <Footer />
 
       <ThemeCustomizer theme={theme} setTheme={setTheme} logo={logo} setLogo={setLogo} />
+      <SocialLinksEditor social={social} setSocial={setSocial} />
     </div>
   );
 }
