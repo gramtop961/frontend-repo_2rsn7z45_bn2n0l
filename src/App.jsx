@@ -6,19 +6,19 @@ import { Leaf } from "lucide-react";
 
 function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur border-b border-emerald-900/10">
+    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur border-b border-[#6a0013]/10">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <a href="#about" className="inline-flex items-center gap-2 text-emerald-900 font-semibold">
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+        <a href="#about" className="inline-flex items-center gap-2 text-[#4a000e] font-semibold">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#f3d6db] text-[#6a0013]">
             <Leaf size={18} />
           </span>
           <span>Antares FRH</span>
         </a>
         <nav className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#about" className="text-emerald-800 hover:text-emerald-900">About</a>
-          <a href="#insights" className="text-emerald-800 hover:text-emerald-900">Insights</a>
-          <a href="#portfolio" className="text-emerald-800 hover:text-emerald-900">Portfolio</a>
-          <a href="#contact" className="text-emerald-800 hover:text-emerald-900">Contact</a>
+          <a href="#about" className="text-[#6a0013] hover:text-[#4a000e]">About</a>
+          <a href="#insights" className="text-[#6a0013] hover:text-[#4a000e]">Insights</a>
+          <a href="#portfolio" className="text-[#6a0013] hover:text-[#4a000e]">Portfolio</a>
+          <a href="#contact" className="text-[#6a0013] hover:text-[#4a000e]">Contact</a>
         </nav>
       </div>
     </header>
@@ -27,8 +27,8 @@ function Header() {
 
 function Footer() {
   return (
-    <footer className="border-t border-emerald-900/10">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-emerald-800/80">
+    <footer className="border-t border-[#6a0013]/10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10 text-sm text-[#6a0013]/80">
         <p>
           © {new Date().getFullYear()} ANTARES FATHUL RIZKI HARAHAP — Built with a climate-positive mindset.
         </p>

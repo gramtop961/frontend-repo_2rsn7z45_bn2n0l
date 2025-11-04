@@ -32,34 +32,34 @@ export default function PortfolioSection() {
     <section id="portfolio" className="bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
         <div className="flex items-center gap-3">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+          <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#f3d6db] text-[#6a0013]">
             <Briefcase size={20} />
           </div>
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-emerald-900">Portfolio & Experience</h2>
-            <p className="text-emerald-800/80">Selected projects, research, and events.</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#4a000e]">Portfolio & Experience</h2>
+            <p className="text-[#6a0013]/80">Selected projects, research, and events.</p>
           </div>
         </div>
 
         <div className="mt-10 grid md:grid-cols-3 gap-6">
           {projects.map((p) => (
-            <div key={p.title} className="rounded-2xl border border-emerald-900/10 p-6 shadow-sm">
+            <div key={p.title} className="rounded-2xl border border-[#6a0013]/10 p-6 shadow-sm">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-emerald-700">{p.year}</span>
+                <span className="text-xs font-medium text-[#6a0013]">{p.year}</span>
                 <a
                   href={p.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-emerald-700 hover:text-emerald-800"
+                  className="text-[#6a0013] hover:text-[#4a000e]"
                 >
                   <ExternalLink size={18} />
                 </a>
               </div>
-              <h3 className="mt-3 text-lg font-semibold text-emerald-900">{p.title}</h3>
-              <p className="mt-2 text-sm text-emerald-800/80">{p.description}</p>
+              <h3 className="mt-3 text-lg font-semibold text-[#4a000e]">{p.title}</h3>
+              <p className="mt-2 text-sm text-[#6a0013]/80">{p.description}</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 {p.tags.map((t) => (
-                  <span key={t} className="px-2 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs border border-emerald-200">
+                  <span key={t} className="px-2 py-1 rounded-full bg-[#fdecef] text-[#6a0013] text-xs border border-[#f3d6db]">
                     {t}
                   </span>
                 ))}
