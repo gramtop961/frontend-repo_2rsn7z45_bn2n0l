@@ -32,6 +32,49 @@ const PRESETS = [
     from: "#f6f7f9",
     to: "#f1f3f5",
   },
+  // Added presets (ANTARES-inspired + popular soft schemes)
+  {
+    id: "antares",
+    name: "Antares Ember",
+    from: "#fff0f3", // very soft red tint
+    to: "#ffd6de",
+  },
+  {
+    id: "aurora",
+    name: "Aurora Veil",
+    from: "#eefcf7",
+    to: "#e4f7ff",
+  },
+  {
+    id: "lavender",
+    name: "Lavender Bloom",
+    from: "#f4efff",
+    to: "#efe9ff",
+  },
+  {
+    id: "peach",
+    name: "Peach Fizz",
+    from: "#fff5ef",
+    to: "#ffece0",
+  },
+  {
+    id: "sage",
+    name: "Sage Field",
+    from: "#eef8f1",
+    to: "#e6f3ea",
+  },
+  {
+    id: "midnight",
+    name: "Midnight Fade",
+    from: "#eef2ff",
+    to: "#edf1ff",
+  },
+  {
+    id: "solar",
+    name: "Solar Flare",
+    from: "#fff9e6",
+    to: "#fff2cc",
+  },
 ];
 
 export default function BackgroundPalette({ isEdit }) {
@@ -95,7 +138,7 @@ export default function BackgroundPalette({ isEdit }) {
             <div className="p-4 grid md:grid-cols-2 gap-4">
               <div>
                 <p className="text-xs font-medium text-[var(--text-primary)]/70 mb-2">Presets</p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 max-h-64 overflow-auto pr-1">
                   {PRESETS.map((p) => (
                     <button
                       key={p.id}
@@ -104,6 +147,8 @@ export default function BackgroundPalette({ isEdit }) {
                         bg.preset === p.id ? "ring-2 ring-[var(--color-primary)]/50" : ""
                       }`}
                       style={{ background: `linear-gradient(135deg, ${p.from} 0%, ${p.to} 100%)` }}
+                      aria-label={p.name}
+                      title={p.name}
                     />
                   ))}
                 </div>
