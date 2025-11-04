@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import AboutSection from "./components/AboutSection";
 import InsightsSection from "./components/InsightsSection";
 import PortfolioSection from "./components/PortfolioSection";
 import ContactSection from "./components/ContactSection";
 import ThemeCustomizer from "./components/ThemeCustomizer";
 import SocialLinksEditor from "./components/SocialLinksEditor";
+import BackgroundPalette from "./components/BackgroundPalette";
+import EditLock from "./components/EditLock";
 import { Leaf, Linkedin, Twitter, MessageCircle } from "lucide-react";
 
 const DEFAULT_THEME = {
@@ -14,6 +16,8 @@ const DEFAULT_THEME = {
   bgLight: "#f8e7ea",
   textPrimary: "#2b2324",
 };
+
+const DEFAULT_BG = { from: "#fdecef", to: "#f8e7ea", preset: "maroon" };
 
 function Header({ logo, social }) {
   return (
@@ -97,22 +101,39 @@ export default function App() {
   const [theme, setTheme] = useState(DEFAULT_THEME);
   const [logo, setLogo] = useState({ type: "text", value: "Antares FRH" });
   const [social, setSocial] = useState({ linkedin: "", whatsapp: "", twitter: "" });
+  const [isEdit, setIsEdit] = useState(false);
+  const [bg, setBg] = useState(DEFAULT_BG);
 
+  // Load persisted settings
   useEffect(() => {
     const savedTheme = localStorage.getItem("afrh-theme");
     if (savedTheme) {
-      try { setTheme(JSON.parse(savedTheme)); } catch {}
+      try {
+        setTheme(JSON.parse(savedTheme));
+      } catch {}
     }
     const savedLogo = localStorage.getItem("afrh-logo");
     if (savedLogo) {
-      try { setLogo(JSON.parse(savedLogo)); } catch {}
+      try {
+        setLogo(JSON.parse(savedLogo));
+      } catch {}
     }
     const savedSocial = localStorage.getItem("afrh-social");
     if (savedSocial) {
-      try { setSocial(JSON.parse(savedSocial)); } catch {}
+      try {
+        setSocial(JSON.parse(savedSocial));
+      } catch {}
+    }
+    const savedBg = localStorage.getItem("afrh-bg");
+    if (savedBg) {
+      try {
+        const parsed = JSON.parse(savedBg);
+        setBg({ from: parsed.from || DEFAULT_BG.from, to: parsed.to || DEFAULT_BG.to, preset: parsed.preset || "custom" });
+      } catch {}
     }
   }, []);
 
+  // Apply theme CSS variables
   useEffect(() => {
     const root = document.documentElement;
     root.style.setProperty("--color-primary", theme.primary);
@@ -122,8 +143,20 @@ export default function App() {
     root.style.setProperty("--text-primary", theme.textPrimary);
   }, [theme]);
 
+  // Apply background variables always (even if editor closed)
+  useEffect(() => {
+    const root = document.documentElement;
+    root.style.setProperty("--app-bg-from", bg.from);
+    root.style.setProperty("--app-bg-to", bg.to);
+  }, [bg]);
+
+  const appBgStyle = useMemo(
+    () => ({ background: `linear-gradient(135deg, var(--app-bg-from, ${bg.from}) 0%, var(--app-bg-to, ${bg.to}) 100%)` }),
+    [bg]
+  );
+
   return (
-    <div className="min-h-screen bg-white font-inter text-[var(--text-primary)]">
+    <div className="min-h-screen font-inter text-[var(--text-primary)]" style={appBgStyle}>
       <Header logo={logo} social={social} />
       <main>
         <AboutSection />
@@ -133,8 +166,15 @@ export default function App() {
       </main>
       <Footer />
 
-      <ThemeCustomizer theme={theme} setTheme={setTheme} logo={logo} setLogo={setLogo} />
-      <SocialLinksEditor social={social} setSocial={setSocial} />
+      {/* Editors: gated by padlock */}
+      {isEdit && (
+        <>
+          <ThemeCustomizer theme={theme} setTheme={setTheme} logo={logo} setLogo={setLogo} />
+          <SocialLinksEditor social={social} setSocial={setSocial} />
+        </>
+      )}
+      <BackgroundPalette isEdit={isEdit} />
+      <EditLock isEdit={isEdit} setIsEdit={setIsEdit} />
     </div>
   );
 }
